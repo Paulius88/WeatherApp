@@ -9,7 +9,31 @@
     <link href="css/app.css" rel="stylesheet">
 </head>
 <body>
-<h1>Hello, world!</h1>
+  <div class="main">
+    <header>
+      <div class="set-temp">
+        <input type="checkbox" value="none" id="set-temp" name="check" />
+        <label for="set-temp"></label>
+      </div>
+
+      <h1>WetaherApp
+      </h1>
+    </header>
+
+    <div class="container-search">
+      <form id="searchForm">
+        <input type="text" id="cityInput" placeholder="Enter your city..." autofocus>
+      </form>
+    </div>
+
+    <div class="weather-info animated" id="outPut">
+      <div class="div-info">
+        <div class="icon-div" id="icon-div"></div>
+        <div class="details" id="details-div"></div>
+      </div>
+
+      <div class="fore-cast" id="outPutForecast"></div>
+  </div>
 <script src="js/app.js"></script>
 </body>
 </html>
