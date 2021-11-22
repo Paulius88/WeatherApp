@@ -3,29 +3,20 @@ const MeteoApi = require('../services/MeteoApi');
 const express = require('express');
 const router = express.Router();
 
-router.get('/places', function(req, res, next) {
-	https.get('https://api.meteo.lt/v1/places', response => {
-		let result = '';
-		response.on('data', function(data) {
-			result += data.toString();
-		});
-		response.on('end', function(data) {
-			res.send(result);
-		});
+router.get('/places/find/:name', function(req, res, next) {
+	MeteoApi.getPlaces().then(places => {
+		places = places.filter(p => p.name.toLowerCase().startsWith(req.params.name.toLowerCase()));
+
+		places = places.slice(0, 10);
+
+		res.json(places);
 	});
 });
 
-
-router.get('/places/:place', function(req, res, next) {
-	https.get(`https://api.meteo.lt/v1/places/${req.params['place']}/forecasts/long-term`, response => {
-		let result = '';
-
-		response.on('data', data => {
-			result += data.toString();
-		});
-
-		response.on('end', () => {
-			res.send(JSON.parse(result));
-		});
+router.get('/place/:code', function(req, res, next) {
+	MeteoApi.getPlaceForecasts(req.params.code).then(place => {
+		res.json(place);
 	});
 });
+
+module.exports = router;
