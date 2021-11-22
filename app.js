@@ -6,8 +6,6 @@ const logger = require('morgan');
 let indexRouter = require('./routes/index');
 let weatherRouter = require('./routes/weather');
 
-require('.services/MeteoApi');
-
 let app = express();
 
 app.use(logger('dev'));
@@ -18,13 +16,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/weather', weatherRouter);
-
-if (!fs.existsSync('./cache')){
-    fs.mkdirSync('./cache');
-
-    if (!fs.existsSync('./cache/default-cities')) {
-        fs.mkdirSync('./cache/default-cities');
-    }
-}
 
 module.exports = app;
