@@ -19,11 +19,27 @@
                 <h4>Today<span id="date"></span></h4>
                 <div><strong class='clock' id="clock"></strong></div>
                 <div class="d-flex justify-content-center h-100">
-                <div class="searchbar">
-                <input class="search_input" type="text" name="" placeholder="Search...">
-            <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                    <div class="searchbar">
+                        <input class="search_input" type="text" name="" placeholder="Search...">
+                        <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+                    </div>
+                </div>
+            </div>
+            <select name="region" id="region"></select>
+            <select name="city" id="city"></select>
+            <div class="weather">
+                <div class="headerWrapper">
+                    <div id="on_display"></div>
+                    <div id="weather_now"></div>
+                </div>
+                <h1 id="current_temp"></h1>
+                <div id="humidity"></div>
+                <div id="wind">
+                    <div id="wind_speed"></div>
+                </div>
+                <div id="later_today"></div>
+            </div>
         </div>
-      </div>
     </div>
     
     <script src="js/app.js"></script>

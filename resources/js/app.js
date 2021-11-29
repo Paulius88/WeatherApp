@@ -1,9 +1,11 @@
-let regionSelect = document.querySelector('#region');
-let citySelect = document.querySelector('#city');
+const regionSelect = document.querySelector('#region');
+const citySelect = document.querySelector('#city');
+const weather = document.querySelector('.weather');
+const searchButton = document.querySelector('.search_icon');
+const searchInput = document.querySelector('.search_input');
 
 function getFilteredLocations() {
     fetch('/weather/places').then(response => response.json()).then(data => {
-
         let rObj = new Set();
         let filteredRegions = data.filter(el => {
             let duplicate = rObj.has(el.administrativeDivision);
@@ -32,7 +34,7 @@ function getFilteredLocations() {
             }
         }
         let defaultCity = document.querySelector('.klaipeda');
-        defaultCity.setAttribute('selected', '');
+        defaultCity.setAttribute('selected', 'klaipeda');
         getWeatherResult();
     });
 };
@@ -62,7 +64,6 @@ setInterval(time,1000);
 
 function createNewForecastItem(conditionCode, temperature, time, wind) {
     let newDiv = document.createElement('div');
-    newDiv.classList.add('col-12');
     let newForecast = document.createElement('div');
     newForecast.classList.add('fas');
     newForecast.classList.add(conditionCode);
@@ -114,12 +115,17 @@ function setWeatherPicture(conditionCode) {
 };
 
 function getWeatherResult() {
-    let selection = citySelect.options[citySelect.selectedIndex].className;
-
+    const searchValue = searchInput.value.toLowerCase();
+    console.log(searchValue);
+    const selection = searchValue || citySelect.options[citySelect.selectedIndex].className;
+    const selectedCityNode = document.querySelector('.' + selection);
+    if (selectedCityNode) {
+        selectedCityNode.setAttribute('selected', 'klaipeda');
+    }
+    
     fetch(`./weather/places/${selection}`).
     then(response => response.json()).
     then(data => {
-
         let time = new Date;
         let currentDate = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()}`;
         let currentTime = `${time.getHours()}`;
@@ -127,11 +133,6 @@ function getWeatherResult() {
         weatherNow.innerHTML = '';
         let laterToday = document.querySelector('#later_today');
         laterToday.innerHTML = '';
-        let tomorrow = document.querySelector('#tomorrow');
-        tomorrow.innerHTML = '';
-        let afterTomorrow = document.querySelector('#after_tomorrow');
-        afterTomorrow.innerHTML = '';
-
 
         for (let t of data.forecastTimestamps) {
 
@@ -163,14 +164,6 @@ function getWeatherResult() {
                 laterToday.appendChild(createNewForecastItem(setWeatherPicture(t.conditionCode),
                     Number(t.airTemperature).toFixed(1), forecastDisplayTime, t.windGust));
             }
-            if (forecastTempDate.slice(8) == +currentDate.slice(8) + 1) {
-                tomorrow.appendChild(createNewForecastItem(setWeatherPicture(t.conditionCode),
-                    Number(t.airTemperature).toFixed(1), forecastDisplayTime, t.windGust));
-            }
-            if (forecastTempDate.slice(8) == +currentDate.slice(8) + 2) {
-                afterTomorrow.appendChild(createNewForecastItem(setWeatherPicture(t.conditionCode),
-                    Number(t.airTemperature).toFixed(1), forecastDisplayTime, t.windGust));
-            }
         };
     });
 };
@@ -190,3 +183,4 @@ regionSelect.addEventListener('input', function() {
 });
 
 citySelect.addEventListener('input', getWeatherResult);
+searchButton.addEventListener('click', getWeatherResult, false);
